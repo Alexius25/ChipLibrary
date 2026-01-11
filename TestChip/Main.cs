@@ -1,15 +1,13 @@
-﻿using System.Reflection;
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Logging;
-using HarmonyLib;
 
 namespace TestChip;
 
 [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
-[BepInDependency("com.snmodding.nautilus")]
+[BepInDependency("com.alexius25.chiplibrary")]
 public class Main : BaseUnityPlugin
 {
-    public new static ManualLogSource Logger { get; private set; }
+    private new static ManualLogSource Logger { get; set; }
 
     private void Awake()
     {
