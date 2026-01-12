@@ -1,5 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
+using ChipLibrary;
+using ChipLibrary.Handler;
 
 namespace TestChip;
 
@@ -16,6 +18,19 @@ public class Main : BaseUnityPlugin
         
         TestChip.Register();
         
+        ChipHandler.OnChipEquipped += OnChipEquipped;
+        ChipHandler.OnChipUnequipped += OnChipUnequipped;
+        
         Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
+    }
+
+    private void OnChipEquipped(TechType techType, ChipBase chip)
+    {
+        ErrorMessage.AddMessage($"Equipped Chip: {techType}");
+    }
+    
+    private void OnChipUnequipped(TechType techType, ChipBase chip)
+    {
+        ErrorMessage.AddMessage($"Unequipped Chip: {techType}");
     }
 }

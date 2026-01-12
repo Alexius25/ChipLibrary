@@ -5,6 +5,9 @@ Make a class that inherits from `ChipBase`.cs:
 ```csharp
 public class TestChipMono : ChipBase
 {
+    public override bool UsesUpdate => true; // Set to true if you want to use the EquippedUpdate method
+    public override TechType TechType => TestChip.TechType; // Reference to your chip's TechType
+    
     public override void OnEquip()
     {
         // Call the base method
@@ -20,6 +23,11 @@ public class TestChipMono : ChipBase
         
         // Code to execute when the chip is unequipped
     }
+    
+    public override void EquippedUpdate()
+    {
+        // Code to execute every frame while the chip is equipped
+    }
 }
 ```
 
@@ -32,10 +40,13 @@ Create your item prefab:
 ```csharp
 public static class TestChip
 {
+    public static TechType TechType;
+    
     public static void Register()
     {
         var prefab = new CustomPrefab("TestChip", "Test Chip",
             "A test chip for demonstration purposes.");
+        TechType = prefab.Info.TechType;
         prefab.SetEquipment(EquipmentType.Chip);
         prefab.SetGameObject(new CloneTemplate(prefab.Info, TechType.ComputerChip));
         prefab.Register();
@@ -80,3 +91,4 @@ Note:
 ## Final Notes
 - An [Example](https://github.com/Alexius25/ChipLibrary/tree/master/TestChip) mod is available on GitHub for reference.
 - Available [Debug Commands](./DebugCommands.md) can help you test your chip in-game.
+- Events are also available for more advanced functionality; see the [Events Documentation](./Events.md) for details.

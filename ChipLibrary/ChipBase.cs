@@ -2,27 +2,49 @@ using UnityEngine;
 
 namespace ChipLibrary;
 
+/// <summary>
+/// The base class for every custom chip. Inherits from MonoBehaviour.
+/// </summary>
 public class ChipBase : MonoBehaviour
 {
-    public bool isEquipped = false;
+    private bool isEquipped = false;
     
+    /// <summary>
+    /// Whether this chip uses the EquippedUpdate method.
+    /// </summary>
+    public virtual bool UsesUpdate => true;
+    
+    /// <summary>
+    /// The TechType of this chip.
+    /// </summary>
+    public virtual TechType TechType => TechType.None;
+    
+    /// <summary>
+    /// Code to run when the chip is equipped.
+    /// </summary>
     public virtual void OnEquip()
     {
         isEquipped = true;
     }
     
+    /// <summary>
+    /// Code to run when the chip is unequipped.
+    /// </summary>
     public virtual void OnUnequip()
     {
         isEquipped = false;
     }
     
+    /// <summary>
+    /// Code to run every frame while the chip is equipped, if UsesUpdate is true.
+    /// </summary>
     public virtual void EquippedUpdate()
     {
     }
 
     private void Update()
     {
-        if (isEquipped)
+        if (isEquipped && UsesUpdate)
         {
             EquippedUpdate();
         }
