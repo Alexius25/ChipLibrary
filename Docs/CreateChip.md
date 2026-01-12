@@ -7,11 +7,17 @@ public class TestChipMono : ChipBase
 {
     public override void OnEquip()
     {
+        // Call the base method
+        base.OnEquip();
+        
         // Code to execute when the chip is equipped
     }
 
     public override void OnUnequip()
     {
+        // Call the base method
+        base.OnUnequip();
+        
         // Code to execute when the chip is unequipped
     }
 }
