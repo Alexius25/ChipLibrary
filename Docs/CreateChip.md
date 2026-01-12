@@ -50,7 +50,8 @@ public static class TestChip
         prefab.SetEquipment(EquipmentType.Chip);
         prefab.SetGameObject(new CloneTemplate(prefab.Info, TechType.ComputerChip));
         prefab.Register();
-        
+
+        // Register the Class you created previously with the techtype of the item
         ChipHandler.RegisterChip<TestChipMono>(prefab.Info.TechType);
     }
 }
