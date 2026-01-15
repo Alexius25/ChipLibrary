@@ -24,13 +24,13 @@ public class Main : BaseUnityPlugin
         Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
     }
 
-    private void OnChipEquipped(TechType techType, ChipBase chip)
+    private void OnChipEquipped(ChipBase chip)
     {
-        ErrorMessage.AddMessage($"Equipped Chip: {techType}");
+        ErrorMessage.AddMessage($"Equipped Chip: {chip.TechType}");
     }
     
-    private void OnChipUnequipped(TechType techType, ChipBase chip)
+    private void OnChipUnequipped(ChipBase chip)
     {
-        ErrorMessage.AddMessage($"Unequipped Chip: {techType}");
+        ErrorMessage.AddMessage($"Unequipped Chip: {chip.TechType}");
     }
 }

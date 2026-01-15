@@ -10,14 +10,14 @@ public class ChipBase : MonoBehaviour
     private bool isEquipped = false;
     
     /// <summary>
+    /// The TechType of this chip. Automatically set when registered.
+    /// </summary>
+    public TechType TechType = TechType.None;
+    
+    /// <summary>
     /// Whether this chip uses the EquippedUpdate method.
     /// </summary>
     public virtual bool UsesUpdate => true;
-    
-    /// <summary>
-    /// The TechType of this chip.
-    /// </summary>
-    public virtual TechType TechType => TechType.None;
     
     /// <summary>
     /// Code to run when the chip is equipped.

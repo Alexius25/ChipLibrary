@@ -9,7 +9,6 @@ namespace TestChip;
 public class TestChipMono : ChipBase
 {
     public override bool UsesUpdate => false;
-    public override TechType TechType => TestChip.TechType;
 
     public override void OnEquip()
     {
@@ -26,13 +25,10 @@ public class TestChipMono : ChipBase
 
 public static class TestChip
 {
-    public static TechType TechType;
-    
     public static void Register()
     {
         var prefab = new CustomPrefab("TestChip", "Test Chip",
             "A test chip for demonstration purposes.");
-        TechType = prefab.Info.TechType;
         prefab.SetEquipment(EquipmentType.Chip);
         prefab.SetGameObject(new CloneTemplate(prefab.Info, TechType.ComputerChip));
         prefab.Register();

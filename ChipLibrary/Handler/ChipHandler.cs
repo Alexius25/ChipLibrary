@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace ChipLibrary.Handler;
@@ -32,42 +33,47 @@ public static class ChipHandler
     /// <summary>
     /// Fired when any custom chip is equipped.
     /// </summary>
-    public static event Action<TechType, ChipBase> OnChipEquipped;
+    public static event Action<ChipBase> OnChipEquipped;
     
     /// <summary>
     /// Fired when any custom chip is unequipped.
     /// </summary>
-    public static event Action<TechType, ChipBase> OnChipUnequipped;
+    public static event Action<ChipBase> OnChipUnequipped;
     
     internal static void HandleEquipmentChange(Player player, string slot, InventoryItem item)
     {
-        TryRemoveChips(player);
+        var equipment = player.GetComponent<Inventory>()._equipment;
+        if (equipment == null) return;
+        
+        var existingChips = player.GetComponentsInChildren<ChipBase>();
+        if (existingChips == null) return;
+
+        foreach (var chip in player.GetComponentsInChildren<ChipBase>())
+        {
+            if (chip != null && equipment.GetCount(chip.TechType) == 0)
+            {
+                OnChipUnequipped?.Invoke(chip);
+                chip.OnUnequip();
+                UnityEngine.Object.Destroy(chip);
+                Main.Logger.LogInfo($"Unequipped chip {chip.TechType} from slot {slot}");
+            }
+        }
 
         foreach (var kvp in _registeredChips)
         {
             TechType techType = kvp.Key;
             Type chipType = kvp.Value;
-
-            if (player.GetComponent<Inventory>()._equipment.GetCount(techType) > 0)
+            
+            bool alreadyEquipped = existingChips
+                .Any(c => c.TechType == techType);
+            
+            if (!alreadyEquipped && equipment.GetCount(techType) > 0)
             {
                 var component = (ChipBase)player.gameObject.AddComponent(chipType);
+                component.TechType = techType;
                 component.OnEquip();
-                OnChipEquipped?.Invoke(techType, component);
+                OnChipEquipped?.Invoke(component);
                 Main.Logger.LogInfo($"Equipped chip {techType} in slot {slot}");
-            }
-        }
-    }
-
-    private static void TryRemoveChips(Player player)
-    {
-        ChipBase[] chips = player.GetComponentsInChildren<ChipBase>();
-        foreach (ChipBase chip in chips)
-        {
-            if (chip != null)
-            {
-                OnChipUnequipped?.Invoke(chip.TechType, chip);
-                chip.OnUnequip();
-                UnityEngine.Object.Destroy(chip);
             }
         }
     }

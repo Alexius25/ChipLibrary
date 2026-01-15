@@ -6,7 +6,6 @@ Make a class that inherits from `ChipBase`.cs:
 public class TestChipMono : ChipBase
 {
     public override bool UsesUpdate => true; // Set to true if you want to use the EquippedUpdate method
-    public override TechType TechType => TestChip.TechType; // Reference to your chip's TechType
     
     public override void OnEquip()
     {
@@ -40,13 +39,10 @@ Create your item prefab:
 ```csharp
 public static class TestChip
 {
-    public static TechType TechType;
-    
     public static void Register()
     {
         var prefab = new CustomPrefab("TestChip", "Test Chip",
             "A test chip for demonstration purposes.");
-        TechType = prefab.Info.TechType;
         prefab.SetEquipment(EquipmentType.Chip);
         prefab.SetGameObject(new CloneTemplate(prefab.Info, TechType.ComputerChip));
         prefab.Register();
@@ -80,7 +76,6 @@ public class Main : BaseUnityPlugin
         Logger = base.Logger;
         
         TestChip.Register();
-        
         Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
     }
 }
