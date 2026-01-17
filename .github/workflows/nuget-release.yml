@@ -9,53 +9,53 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '6.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
 
-    - name: Extract version from tag
-      id: get_version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      - name: Extract version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
-    - name: Restore dependencies
-      run: dotnet restore ChipLibrary.sln
+      - name: Restore dependencies
+        run: dotnet restore ChipLibrary.sln
 
-    - name: Build project
-      run: dotnet build ChipLibrary.sln --configuration Release --no-restore
+      - name: Build project
+        run: dotnet build ChipLibrary.sln --configuration Release --no-restore
 
-    - name: Pack NuGet package
-      run: |
-        dotnet pack ChipLibrary/ChipLibrary.csproj \
-          --configuration Release \
-          --output ./nupkg \
-          --no-build \
-          --version ${{ steps.get_version.outputs.VERSION }}
+      - name: Pack NuGet package
+        run: |
+          dotnet pack ChipLibrary/ChipLibrary.csproj \
+            --configuration Release \
+            --output ./nupkg \
+            --no-build \
+            --version ${{ steps.get_version.outputs.VERSION }}
 
-    - name: Publish to NuGet
-      run: |
-        dotnet nuget push ./nupkg/*.nupkg \
-          --api-key ${{ secrets.NUGET_API_KEY }} \
-          --source https://api.nuget.org/v3/index.json \
-          --skip-duplicate
+      - name: Publish to NuGet
+        run: |
+          dotnet nuget push ./nupkg/*.nupkg \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
 
-    - name: Create ZIP with DLL
-      run: |
-        mkdir -p zip_temp/ChipLibrary
-        cp ./ChipLibrary/bin/Release/net472/ChipLibrary.dll zip_temp/ChipLibrary/
-        cd zip_temp
-        zip -r ../ChipLibrary-${{ steps.get_version.outputs.VERSION }}.zip ChipLibrary
-        cd ..
-      shell: bash
+      - name: Create ZIP with DLL
+        run: |
+          mkdir -p zip_temp/ChipLibrary
+          cp ./ChipLibrary/bin/Release/net472/ChipLibrary.dll zip_temp/ChipLibrary/
+          cd zip_temp
+          zip -r ../ChipLibrary-${{ steps.get_version.outputs.VERSION }}.zip ChipLibrary
+          cd ..
+        shell: bash
 
-    - name: Upload assets to release
+      - name: Upload assets to release
         uses: softprops/action-gh-release@v1
         with:
-            files: |
-                ./ChipLibrary/bin/Release/net472/ChipLibrary.dll
-                ./ChipLibrary-${{ steps.get_version.outputs.VERSION }}.zip
+          files: |
+            ./ChipLibrary/bin/Release/net472/ChipLibrary.dll
+            ./ChipLibrary-${{ steps.get_version.outputs.VERSION }}.zip
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
