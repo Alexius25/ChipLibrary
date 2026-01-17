@@ -1,5 +1,11 @@
 # Chip Creation Guide
 
+## Reference Library
+Chip Library is available either as a dll or through nuget. You need to reference it in your project to create custom chips.
+```
+dotnet add package Alexius25.ChipLibrary --version 1.3.0
+```
+
 ## Step 1
 Make a class that inherits from `ChipBase`.cs:
 ```csharp
@@ -82,7 +88,7 @@ public class Main : BaseUnityPlugin
 ```
 
 Note:
-- You need to add a dependency on ChipLibrary in your BepInEx plugin attributes. (`[BepInDependency("com.alexius25.chiplibrary")]`)
+- You need to add a dependency on ChipLibrary in your BepInEx plugin attributes. (`[BepInDependency("com.alexius25.chiplibrary")]`) and users have to install ChipLibrary for your mod to work.
 
 ## Final Notes
 - An [Example](https://github.com/Alexius25/ChipLibrary/tree/master/TestChip) mod is available on GitHub for reference.
