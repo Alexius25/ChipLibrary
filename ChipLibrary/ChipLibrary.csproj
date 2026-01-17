@@ -14,6 +14,13 @@
             https://api.nuget.org/v3/index.json;
             https://nuget.bepinex.dev/v3/index.json;
         </RestoreAdditionalProjectSources>
+        
+        <PackageId>Alexius25.ChipLibrary</PackageId>
+        <Authors>Alexius25</Authors>
+        <Description>A chip system library for Subnautica mods using BepInEx</Description>
+        <PackageTags>subnautica;bepinex;modding</PackageTags>
+        <RepositoryUrl>https://github.com/Alexius25/ChipLibrary</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
     <ItemGroup>

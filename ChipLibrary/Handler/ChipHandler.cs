@@ -54,7 +54,7 @@ public static class ChipHandler
             {
                 OnChipUnequipped?.Invoke(chip);
                 chip.OnUnequip();
-                UnityEngine.Object.Destroy(chip);
+                chip.isEquipped = false;
                 Main.Logger.LogInfo($"Unequipped chip {chip.TechType} from slot {slot}");
             }
         }
@@ -65,12 +65,19 @@ public static class ChipHandler
             Type chipType = kvp.Value;
             
             bool alreadyEquipped = existingChips
-                .Any(c => c.TechType == techType);
+                .Any(c => c.TechType == techType && c.isEquipped);
             
             if (!alreadyEquipped && equipment.GetCount(techType) > 0)
             {
-                var component = (ChipBase)player.gameObject.AddComponent(chipType);
+                var component = (ChipBase)player.gameObject.GetComponent(chipType);
+                
+                if (component == null)
+                {
+                    component = (ChipBase)player.gameObject.AddComponent(chipType);
+                }
+                
                 component.TechType = techType;
+                component.isEquipped = true;
                 component.OnEquip();
                 OnChipEquipped?.Invoke(component);
                 Main.Logger.LogInfo($"Equipped chip {techType} in slot {slot}");

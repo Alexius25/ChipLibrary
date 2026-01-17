@@ -7,7 +7,10 @@ namespace ChipLibrary;
 /// </summary>
 public class ChipBase : MonoBehaviour
 {
-    private bool isEquipped = false;
+    /// <summary>
+    /// Whether this chip is currently equipped or not.
+    /// </summary>
+    public bool isEquipped = false;
     
     /// <summary>
     /// The TechType of this chip. Automatically set when registered.

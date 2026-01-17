@@ -9,11 +9,14 @@ namespace TestChip;
 public class TestChipMono : ChipBase
 {
     public override bool UsesUpdate => false;
+    
+    public int equipCount = 0;
 
     public override void OnEquip()
     {
         base.OnEquip();
-        ErrorMessage.AddMessage("TestChip equipped!");
+        equipCount += 1;
+        ErrorMessage.AddMessage("TestChip equipped! Count: " + equipCount);
     }
 
     public override void OnUnequip()
