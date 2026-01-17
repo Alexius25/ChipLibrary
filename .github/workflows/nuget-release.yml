@@ -22,10 +22,10 @@ jobs:
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
       - name: Restore dependencies
-        run: dotnet restore ChipLibrary.sln
+        run: dotnet restore ChipLibrary/ChipLibrary.csproj
 
       - name: Build project
-        run: dotnet build ChipLibrary.sln --configuration Release --no-restore
+        run: dotnet build ChipLibrary/ChipLibrary.csproj --configuration Release --no-restore
 
       - name: Pack NuGet package
         run: |
