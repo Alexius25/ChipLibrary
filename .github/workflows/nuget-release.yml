@@ -51,18 +51,11 @@ jobs:
         cd ..
       shell: bash
 
-    - name: Upload DLL to release
-      uses: actions/upload-release-asset@v2
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./ChipLibrary/bin/Release/net472/ChipLibrary.dll
-        asset_name: ChipLibrary-${{ steps.get_version.outputs.VERSION }}.dll
-        asset_content_type: application/octet-stream
-
-    - name: Upload ZIP to release
-      uses: actions/upload-release-asset@v2
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./ChipLibrary-${{ steps.get_version.outputs.VERSION }}.zip
-        asset_name: ChipLibrary-${{ steps.get_version.outputs.VERSION }}.zip
-        asset_content_type: application/zip
+    - name: Upload assets to release
+        uses: softprops/action-gh-release@v1
+        with:
+            files: |
+                ./ChipLibrary/bin/Release/net472/ChipLibrary.dll
+                ./ChipLibrary-${{ steps.get_version.outputs.VERSION }}.zip
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
