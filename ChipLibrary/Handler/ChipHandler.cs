@@ -40,6 +40,31 @@ public static class ChipHandler
     /// </summary>
     public static event Action<ChipBase> OnChipUnequipped;
     
+    /// <summary>
+    /// Gets all chip components of the specified type.
+    /// </summary>
+    /// <param name="onlyEquipped">If true, only returns equipped chips.</param>
+    /// <typeparam name="T">The class type of the chip, must inherit from ChipBase</typeparam>
+    /// <returns>A list of chip components of the specified type.</returns>
+    public static List<T> GetChipComponent<T>(bool onlyEquipped) where T : ChipBase
+    {
+        var player = Player.main;
+        if (player == null) return new List<T>();
+        
+        var chips = player.GetComponentsInChildren<T>();
+        if (chips == null) return new List<T>();
+        
+        return onlyEquipped ? chips.Where(c => c.isEquipped).ToList() : chips.ToList();
+    }
+    
+    /// <summary>
+    /// Gets the first equipped chip of the specified type.
+    /// </summary>
+    public static T GetFirstEquippedChip<T>() where T : ChipBase
+    {
+        return GetChipComponent<T>(onlyEquipped: true).FirstOrDefault();
+    }
+    
     internal static void HandleEquipmentChange(Player player, string slot, InventoryItem item)
     {
         var equipment = player.GetComponent<Inventory>()._equipment;

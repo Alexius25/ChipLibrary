@@ -25,13 +25,10 @@
         <PackageReference Include="Subnautica.GameLibs" Version="82304.0.0-r.0"/>
         <PackageReference Include="PolySharp" Version="1.15.0"/>
         <PackageReference Include="Subnautica.Nautilus" Version="1.*-*" PrivateAssets="all"/>
+        <PackageReference Include="Alexius25.ChipLibrary" Version="1.3.0"/>
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\ChipLibrary\ChipLibrary.csproj" />
     </ItemGroup>
 </Project>

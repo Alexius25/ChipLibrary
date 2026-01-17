@@ -21,10 +21,6 @@ jobs:
       id: get_version
       run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
-    - name: Update project version
-      run: |
-        sed -i "s/<Version>.*<\/Version>/<Version>${{ steps.get_version.outputs.VERSION }}<\/Version>/" ChipLibrary/ChipLibrary.csproj
-
     - name: Restore dependencies
       run: dotnet restore ChipLibrary.sln
 
@@ -32,12 +28,41 @@ jobs:
       run: dotnet build ChipLibrary.sln --configuration Release --no-restore
 
     - name: Pack NuGet package
-      run: dotnet pack ChipLibrary/ChipLibrary.csproj \
-        --configuration Release \
-        --no-build \
-        --output ./nupkg
+      run: |
+        dotnet pack ChipLibrary/ChipLibrary.csproj \
+          --configuration Release \
+          --output ./nupkg \
+          --no-build \
+          --version ${{ steps.get_version.outputs.VERSION }}
 
     - name: Publish to NuGet
-      run: dotnet nuget push ./nupkg/**/*.nupkg \
-        --api-key ${{ secrets.NUGET_API_KEY }} \
-        --source https://api.nuget.org/v3/index.json
+      run: |
+        dotnet nuget push ./nupkg/*.nupkg \
+          --api-key ${{ secrets.NUGET_API_KEY }} \
+          --source https://api.nuget.org/v3/index.json \
+          --skip-duplicate
+
+    - name: Create ZIP with DLL
+      run: |
+        mkdir -p zip_temp/ChipLibrary
+        cp ./ChipLibrary/bin/Release/net472/ChipLibrary.dll zip_temp/ChipLibrary/
+        cd zip_temp
+        zip -r ../ChipLibrary-${{ steps.get_version.outputs.VERSION }}.zip ChipLibrary
+        cd ..
+      shell: bash
+
+    - name: Upload DLL to release
+      uses: actions/upload-release-asset@v2
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./ChipLibrary/bin/Release/net472/ChipLibrary.dll
+        asset_name: ChipLibrary-${{ steps.get_version.outputs.VERSION }}.dll
+        asset_content_type: application/octet-stream
+
+    - name: Upload ZIP to release
+      uses: actions/upload-release-asset@v2
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./ChipLibrary-${{ steps.get_version.outputs.VERSION }}.zip
+        asset_name: ChipLibrary-${{ steps.get_version.outputs.VERSION }}.zip
+        asset_content_type: application/zip
