@@ -3,7 +3,7 @@
 ## Reference Library
 Chip Library is available either as a dll or through nuget. You need to reference it in your project to create custom chips.
 ```
-dotnet add package Alexius25.ChipLibrary --version 1.3.0
+dotnet add package Alexius25.ChipLibrary
 ```
 
 ## Step 1
